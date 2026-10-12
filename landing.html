@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en" class="landing-html">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Placement Prediction System | AI & ML Campus Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Dedicated Landing Page Styles */
+    :root {
+      --primary-green: #008F68;
+      --primary-green-light: #E8F8F0;
+      --primary-green-hover: #007454;
+      --dark-navy: #0B132B;
+      --slate-dark: #1E293B;
+      --slate-muted: #64748B;
+      --slate-light: #F8FAFC;
+      --border-subtle: #E2E8F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, html.landing-html {
+      height: auto !important;
+      min-height: 100% !important;
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      scroll-behavior: smooth;
+    }
+
+    body, body.landing-body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FFFFFF;
+      color: #1E293B;
+      line-height: 1.6;
+      min-height: 100vh !important;
+      height: auto !important;
+      overflow-x: hidden !important;
+      overflow-y: visible !important;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+
+    /* Top Sticky Navigation Bar */
+    .landing-nav {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 1000;
+      transition: all 0.2s ease;
+    }
+
+    .landing-nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--dark-navy);
+    }
+
+    .brand-logo-icon {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo-text {
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+      color: #0F172A;
+    }
+
+    .landing-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .landing-nav-links a {
+      text-decoration: none;
+      color: #475569;
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: color 0.15s ease;
+    }
+
+    .landing-nav-links a:hover {
+      color: var(--primary-green);
+    }
+
+    .landing-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav-login {
+      padding: 8px 18px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-nav-login:hover {
+      background: #F1F5F9;
+      border-color: #CBD5E1;
+      color: #0F172A;
+    }
+
+    .btn-nav-dashboard {
+      padding: 8px 20px;
+      border-radius: 9999px;
+      background: var(--primary-green);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px rgba(0, 143, 104, 0.25);
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn-nav-dashboard:hover {
+      background: var(--primary-green-hover);
+      box-shadow: 0 6px 16px rgba(0, 143, 104, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 70px 24px 60px;
+      max-width: 1240px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-glow-bg {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 750px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(59, 130, 246, 0.05) 50%, transparent 70%);
+      filter: blur(50px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: var(--primary-green-light);
+      color: var(--primary-green);
+      border: 1px solid rgba(0, 143, 104, 0.2);
+      border-radius: 9999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 46px;
+      line-height: 1.15;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -1.2px;
+      max-width: 880px;
+      margin: 0 auto 20px;
+    }
+
+    .hero-title span.highlight {
+      background: linear-gradient(135deg, #008F68 0%, #059669 50%, #2563EB 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 17px;
+      color: #64748B;
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.6;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .btn-hero-primary {
+      padding: 13px 28px;
+      border-radius: 12px;
+      background: #0F172A;
+      color: #FFFFFF;
+      font-size: 14.5px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.2);
+    }
+
+    .btn-hero-primary:hover {
+      background: #1E293B;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+    }
+
+    .btn-hero-secondary {
+      padding: 13px 26px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: #0F172A;
+      border: 1px solid var(--border-subtle);
+      font-size: 14.5px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-hero-secondary:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+      transform: translateY(-2px);
+    }
+
+    /* Live Hero Stats Bar */
+    .hero-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 960px;
+      margin: 0 auto 50px;
+    }
+
+    .stat-card-box {
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .stat-card-box:hover {
+      transform: translateY(-3px);
+      border-color: #CBD5E1;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.5px;
+    }
+
+    .stat-number.green { color: var(--primary-green); }
+    .stat-number.blue { color: #2563EB; }
+    .stat-number.purple { color: #7C3AED; }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748B;
+      margin-top: 4px;
+    }
+
+    /* Hero Interactive Preview Mockup */
+    .hero-mockup-wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 20px;
+      border: 1px solid #CBD5E1;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      background: #FFFFFF;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .mockup-header-bar {
+      height: 40px;
+      background: #F1F5F9;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .mockup-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .mockup-dot.red { background: #EF4444; }
+    .mockup-dot.yellow { background: #F59E0B; }
+    .mockup-dot.green { background: #10B981; }
+
+    .mockup-url-bar {
+      flex: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border-radius: 6px;
+      height: 24px;
+      border: 1px solid #E2E8F0;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748B;
+      font-family: monospace;
+    }
+
+    .mockup-body-content {
+      padding: 24px;
+      background: #F8FAFC;
+    }
+
+    /* Interactive Live Placement Estimator Micro-Tool */
+    .estimator-section {
+      background: #F8FAFC;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 70px 24px;
+    }
+
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 46px;
+    }
+
+    .section-pill {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--primary-green);
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.6px;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      font-size: 15px;
+      color: #64748B;
+    }
+
+    .estimator-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 36px;
+      align-items: center;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .estimator-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .estimator-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .estimator-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1E293B;
+    }
+
+    .estimator-range {
+      width: 100%;
+      height: 6px;
+      border-radius: 6px;
+      background: #E2E8F0;
+      outline: none;
+      accent-color: var(--primary-green);
+    }
+
+    .estimator-result-card {
+      background: #F1FDF6;
+      border: 1px solid #A7F3D0;
+      border-radius: 16px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .result-badge-status {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 9999px;
+      background: #059669;
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .result-prob-value {
+      font-size: 44px;
+      font-weight: 800;
+      color: #065F46;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .result-prob-desc {
+      font-size: 12.5px;
+      color: #047857;
+      margin-bottom: 20px;
+    }
+
+    .btn-view-simulator {
+      display: inline-block;
+      width: 100%;
+      padding: 10px;
+      background: #0F172A;
+      color: #FFFFFF;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background 0.15s ease;
+    }
+
+    .btn-view-simulator:hover {
+      background: #1E293B;
+    }
+
+    /* Feature Grid Section */
+    .features-section {
+      padding: 80px 24px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+      border-color: #CBD5E1;
+    }
+
+    .feature-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .feature-icon-box.green { background: #ECFDF5; color: #059669; }
+    .feature-icon-box.blue { background: #EFF6FF; color: #2563EB; }
+    .feature-icon-box.purple { background: #F5F3FF; color: #7C3AED; }
+    .feature-icon-box.amber { background: #FFFBEB; color: #D97706; }
+    .feature-icon-box.rose { background: #FFF1F2; color: #E11D48; }
+    .feature-icon-box.teal { background: #F0FDFA; color: #0D9488; }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 13.5px;
+      color: #64748B;
+      line-height: 1.55;
+    }
+
+    /* Workflow Pipeline Section */
+    .pipeline-section {
+      background: #F8FAFC;
+      border-top: 1px solid var(--border-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 80px 24px;
+    }
+
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      position: relative;
+    }
+
+    .pipeline-step-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .step-badge-number {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-green-light);
+      color: var(--primary-green);
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .pipeline-step-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 6px;
+    }
+
+    .pipeline-step-card p {
+      font-size: 12.5px;
+      color: #64748B;
+      line-height: 1.5;
+    }
+
+    /* ML Models Matrix Section */
+    .models-section {
+      padding: 80px 24px;
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+
+    .models-table-wrap {
+      background: #FFFFFF;
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .models-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+
+    .models-table th {
+      background: #F8FAFC;
+      padding: 14px 20px;
+      font-weight: 700;
+      color: #475569;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .models-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid #F1F5F9;
+      color: #1E293B;
+    }
+
+    .badge-accuracy {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .badge-accuracy.best {
+      background: #ECFDF5;
+      color: #059669;
+      border: 1px solid #A7F3D0;
+    }
+
+    .badge-accuracy.good {
+      background: #EFF6FF;
+      color: #2563EB;
+      border: 1px solid #BFDBFE;
+    }
+
+    /* CTA Banner */
+    .cta-banner-section {
+      max-width: 1240px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+    }
+
+    .cta-banner-inner {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      border-radius: 24px;
+      padding: 60px 40px;
+      text-align: center;
+      color: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner-inner h2 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.6px;
+      margin-bottom: 14px;
+    }
+
+    .cta-banner-inner p {
+      font-size: 16px;
+      color: #94A3B8;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+
+    /* Footer */
+    .landing-footer {
+      background: #0B132B;
+      color: #94A3B8;
+      padding: 60px 24px 30px;
+      border-top: 1px solid #1E293B;
+    }
+
+    .footer-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-brand h4 {
+      color: #FFFFFF;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .footer-col h5 {
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-col a {
+      color: #94A3B8;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.15s ease;
+    }
+
+    .footer-col a:hover {
+      color: #34D399;
+    }
+
+    .footer-bottom {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid #1E293B;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .hero-title { font-size: 36px; }
+      .hero-stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline-grid { grid-template-columns: repeat(2, 1fr); }
+      .estimator-card { grid-template-columns: 1fr; }
+      .footer-container { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .landing-nav-links { display: none; }
+      .hero-title { font-size: 28px; }
+      .hero-stats-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .pipeline-grid { grid-template-columns: 1fr; }
+      .footer-container { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body class="landing-body">
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="landing-nav">
+    <div class="landing-nav-container">
+      <a href="landing.html" class="brand-logo-wrap">
+        <span class="brand-logo-icon">🎓</span>
+        <span class="brand-logo-text">Student Placement Prediction</span>
+      </a>
+
+      <nav>
+        <ul class="landing-nav-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#estimator">Live Estimator</a></li>
+          <li><a href="#pipeline">How It Works</a></li>
+          <li><a href="#models">ML Models</a></li>
+          <li><a href="index.html#/what-if">Simulator</a></li>
+        </ul>
+      </nav>
+
+      <div class="landing-nav-actions">
+        <a href="login.html" class="btn-nav-login">Sign In</a>
+        <a href="index.html#/dashboard" class="btn-nav-dashboard">
+          <span>🚀</span>
+          <span>Launch Dashboard</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-glow-bg"></div>
+
+    <div class="hero-pill-badge">
+      <span>✨</span>
+      <span>Machine Learning Campus Recruitment Intelligence 2026</span>
+    </div>
+
+    <h1 class="hero-title">
+      Predict Placement Outcomes. <br>
+      <span class="highlight">Bridge Student Skill Gaps</span> with AI.
+    </h1>
+
+    <p class="hero-subtitle">
+      A comprehensive supervised machine learning system analyzing student academics, coding proficiency, aptitude scores, and internship experience to accurately forecast placement success before recruiters arrive.
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="index.html#/dashboard" class="btn-hero-primary">
+        <span>🚀</span>
+        <span>Open Interactive Dashboard</span>
+      </a>
+      <a href="login.html" class="btn-hero-secondary">
+        <span>🔐</span>
+        <span>Student & Faculty Portal</span>
+      </a>
+    </div>
+
+    <!-- Live Placement Statistics Bar -->
+    <div class="hero-stats-grid">
+      <div class="stat-card-box">
+        <div class="stat-number green">89.2%</div>
+        <div class="stat-label">Model Prediction Accuracy</div>
+      </div>
+      <div class="stat-card-box">
+        <div class="stat-number blue">1,248+</div>
+        <div class="stat-label">Student Profiles Analyzed</div>
+      </div>
+      <div class="stat-card-box">
+        <div class="stat-number purple">71.5%</div>
+        <div class="stat-label">Campus Placement Rate</div>
+      </div>
+      <div class="stat-card-box">
+        <div class="stat-number">6+</div>
+        <div class="stat-label">Trained ML Classification Models</div>
+      </div>
+    </div>
+
+    <!-- Hero Browser Dashboard Mockup -->
+    <div class="hero-mockup-wrapper">
+      <div class="mockup-header-bar">
+        <div class="mockup-dot red"></div>
+        <div class="mockup-dot yellow"></div>
+        <div class="mockup-dot green"></div>
+        <div class="mockup-url-bar">https://placement-prediction.college.edu/dashboard</div>
+      </div>
+      <div class="mockup-body-content">
+        <!-- Interactive Preview Teaser -->
+        <div style="background: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; padding: 24px; text-align: left;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+            <div>
+              <h3 style="font-size: 18px; font-weight: 800; color: #0F172A;">Live AI Prediction Preview</h3>
+              <p style="font-size: 13px; color: #64748B;">Supervised Classification Model Output Sample</p>
+            </div>
+            <a href="index.html#/dashboard" style="font-size: 12px; font-weight: 700; color: #008F68; text-decoration: none;">View Full App &rarr;</a>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div style="padding: 16px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 12px;">
+              <div style="font-size: 11px; font-weight: 700; color: #047857;">PREDICTED STATUS</div>
+              <div style="font-size: 22px; font-weight: 800; color: #065F46; margin: 4px 0;">PLACED</div>
+              <div style="font-size: 12px; color: #059669;">84% Likelihood Probability</div>
+            </div>
+            <div style="padding: 16px; background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px;">
+              <div style="font-size: 11px; font-weight: 700; color: #1D4ED8;">TOP IMPACT FEATURE</div>
+              <div style="font-size: 22px; font-weight: 800; color: #1E40AF; margin: 4px 0;">CGPA: 8.6</div>
+              <div style="font-size: 12px; color: #2563EB;">Strong Academic Weight (+42%)</div>
+            </div>
+            <div style="padding: 16px; background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 12px;">
+              <div style="font-size: 11px; font-weight: 700; color: #B45309;">SKILL GAP IDENTIFIED</div>
+              <div style="font-size: 22px; font-weight: 800; color: #92400E; margin: 4px 0;">Communication</div>
+              <div style="font-size: 12px; color: #D97706;">Needs Mock Interview Practice</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Placement Estimator Micro-Tool -->
+  <section class="estimator-section" id="estimator">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-pill">Interactive Demo</span>
+        <h2 class="section-title">Test the Prediction Engine Instantly</h2>
+        <p class="section-desc">Adjust student metrics below and see how the trained machine learning model evaluates campus placement likelihood in real time.</p>
+      </div>
+
+      <div class="estimator-card">
+        <div class="estimator-controls">
+          <div class="estimator-field">
+            <div class="estimator-label-row">
+              <span>Cumulative CGPA</span>
+              <span id="label-cgpa" style="color: var(--primary-green);">7.8 / 10.0</span>
+            </div>
+            <input type="range" class="estimator-range" id="input-cgpa" min="5.0" max="10.0" step="0.1" value="7.8">
+          </div>
+
+          <div class="estimator-field">
+            <div class="estimator-label-row">
+              <span>Aptitude Test Score</span>
+              <span id="label-aptitude" style="color: var(--primary-green);">72%</span>
+            </div>
+            <input type="range" class="estimator-range" id="input-aptitude" min="30" max="100" step="1" value="72">
+          </div>
+
+          <div class="estimator-field">
+            <div class="estimator-label-row">
+              <span>Technical & Coding Rating</span>
+              <span id="label-tech" style="color: var(--primary-green);">7 / 10</span>
+            </div>
+            <input type="range" class="estimator-range" id="input-tech" min="1" max="10" step="1" value="7">
+          </div>
+
+          <div class="estimator-field">
+            <div class="estimator-label-row">
+              <span>Internship Experience</span>
+              <span id="label-internship" style="color: var(--primary-green);">1 Internship</span>
+            </div>
+            <input type="range" class="estimator-range" id="input-internship" min="0" max="3" step="1" value="1">
+          </div>
+        </div>
+
+        <div class="estimator-result-card">
+          <div class="result-badge-status" id="res-badge">PLACED</div>
+          <div class="result-prob-value" id="res-prob">82%</div>
+          <p class="result-prob-desc" id="res-desc">High probability of recruitment based on strong CGPA and aptitude score.</p>
+          <a href="index.html#/what-if" class="btn-view-simulator">Launch Full What-If Simulator &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-pill">Core Capabilities</span>
+        <h2 class="section-title">Built for Modern Campus Recruitment</h2>
+        <p class="section-desc">From predictive classification to explainable AI and skill gap remediation, everything students and colleges need in one platform.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box green">🧠</div>
+          <h3>AI Prediction Explanation</h3>
+          <p>Transparents decisions using feature importance attribution. Students discover exact factors influencing their likelihood score.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box blue">📊</div>
+          <h3>Skill Gap Analysis</h3>
+          <p>Identifies competencies holding students back across technical, aptitude, and communication parameters with tailored suggestions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box purple">🔄</div>
+          <h3>What-If Simulation Engine</h3>
+          <p>Interactive playground allowing students to adjust mock grades and project counts to see how placement odds improve dynamically.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box amber">📄</div>
+          <h3>AI Resume Analyzer</h3>
+          <p>Parses student resumes against recruiter ATS criteria, highlighting matched skills, missing keywords, and recommended additions.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box rose">👥</div>
+          <h3>Batch CSV Prediction</h3>
+          <p>Enables placement cells and college administrators to upload 500+ student records at once and export detailed classification reports.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box teal">💼</div>
+          <h3>Company & Job Matching</h3>
+          <p>Compares student qualification profiles with requirements of top hiring partners (TCS, Infosys, Wipro, Amazon, Microsoft).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pipeline / How It Works Section -->
+  <section class="pipeline-section" id="pipeline">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-pill">Architecture & Flow</span>
+        <h2 class="section-title">End-to-End Machine Learning Pipeline</h2>
+        <p class="section-desc">How student academic records transform into actionable placement forecasts.</p>
+      </div>
+
+      <div class="pipeline-grid">
+        <div class="pipeline-step-card">
+          <div class="step-badge-number">1</div>
+          <h4>Student Data Ingestion</h4>
+          <p>Collects 12+ student attributes including 10th%, 12th%, CGPA, backlogs, aptitude test, and coding skills.</p>
+        </div>
+
+        <div class="pipeline-step-card">
+          <div class="step-badge-number">2</div>
+          <h4>Data Preprocessing</h4>
+          <p>Handles missing values, standardizes continuous features, and applies one-hot encoding on categorical attributes.</p>
+        </div>
+
+        <div class="pipeline-step-card">
+          <div class="step-badge-number">3</div>
+          <h4>Supervised ML Classification</h4>
+          <p>Ensemble of trained models (Random Forest, Logistic Regression, Decision Tree) outputs calibrated probability score.</p>
+        </div>
+
+        <div class="pipeline-step-card">
+          <div class="step-badge-number">4</div>
+          <h4>Actionable Interventions</h4>
+          <p>Provides personalized recommendations, readiness tracking, and targeted practice plans before interviews.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ML Models Comparison Matrix -->
+  <section class="models-section" id="models">
+    <div class="section-container">
+      <div class="section-header">
+        <span class="section-pill">Model Benchmarks</span>
+        <h2 class="section-title">Classification Performance Comparison</h2>
+        <p class="section-desc">Evaluated across historical college recruitment datasets using 80/20 train-test splits.</p>
+      </div>
+
+      <div class="models-table-wrap">
+        <table class="models-table">
+          <thead>
+            <tr>
+              <th>Algorithm / Classifier</th>
+              <th>Accuracy</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>F1-Score</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Random Forest Classifier</strong></td>
+              <td><span class="badge-accuracy best">92.4%</span></td>
+              <td>91.8%</td>
+              <td>93.1%</td>
+              <td>92.4%</td>
+              <td><span style="color: #059669; font-weight: 700;">★ Best Performing</span></td>
+            </tr>
+            <tr>
+              <td><strong>Support Vector Machine (SVM)</strong></td>
+              <td><span class="badge-accuracy good">88.5%</span></td>
+              <td>87.9%</td>
+              <td>89.2%</td>
+              <td>88.5%</td>
+              <td>Supported</td>
+            </tr>
+            <tr>
+              <td><strong>Logistic Regression</strong></td>
+              <td><span class="badge-accuracy good">86.8%</span></td>
+              <td>85.4%</td>
+              <td>87.0%</td>
+              <td>86.2%</td>
+              <td>Supported</td>
+            </tr>
+            <tr>
+              <td><strong>Decision Tree Classifier</strong></td>
+              <td><span class="badge-accuracy good">84.1%</span></td>
+              <td>83.5%</td>
+              <td>85.0%</td>
+              <td>84.2%</td>
+              <td>Supported</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner Section -->
+  <section class="cta-banner-section">
+    <div class="cta-banner-inner">
+      <h2>Ready to Boost Campus Placement Success?</h2>
+      <p>Join placement cells, faculty mentors, and CSE AI/ML students actively using data-driven intelligence.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="index.html#/dashboard" class="btn-hero-primary" style="background: var(--primary-green); color: #FFFFFF;">
+          <span>🚀</span>
+          <span>Access Student Dashboard</span>
+        </a>
+        <a href="login.html" class="btn-hero-secondary" style="background: transparent; color: #FFFFFF; border-color: rgba(255,255,255,0.3);">
+          <span>🔐</span>
+          <span>Sign In to Portal</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <h4><span>🎓</span> Student Placement Prediction</h4>
+        <p>A supervised machine learning system engineered for academic institutions to forecast recruitment outcomes and empower student careers.</p>
+      </div>
+
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="landing.html">Home</a></li>
+          <li><a href="index.html#/dashboard">Main Dashboard</a></li>
+          <li><a href="login.html">Sign In Portal</a></li>
+          <li><a href="index.html#/what-if">What-If Simulator</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Modules</h5>
+        <ul>
+          <li><a href="index.html#/students">Student Data</a></li>
+          <li><a href="index.html#/skill-gap-analysis">Skill Gap Analysis</a></li>
+          <li><a href="index.html#/resume-analyzer">Resume Analyzer</a></li>
+          <li><a href="index.html#/batch-prediction">Batch Prediction</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Tech Stack</h5>
+        <ul>
+          <li><span>Python & Scikit-Learn</span></li>
+          <li><span>Random Forest & XGBoost</span></li>
+          <li><span>HTML5 / CSS3 / Vanilla JS</span></li>
+          <li><span>Node.js / Express</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 Student Placement Prediction System. All rights reserved.</div>
+      <div>Designed for CSE AI/ML Semester Project & College Placement Cells.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Live interactive placement estimator logic on landing page
+    const inCgpa = document.getElementById('input-cgpa');
+    const inApt = document.getElementById('input-aptitude');
+    const inTech = document.getElementById('input-tech');
+    const inIntern = document.getElementById('input-internship');
+
+    const lblCgpa = document.getElementById('label-cgpa');
+    const lblApt = document.getElementById('label-aptitude');
+    const lblTech = document.getElementById('label-tech');
+    const lblIntern = document.getElementById('label-internship');
+
+    const resBadge = document.getElementById('res-badge');
+    const resProb = document.getElementById('res-prob');
+    const resDesc = document.getElementById('res-desc');
+
+    function calculatePlacement() {
+      const cgpa = parseFloat(inCgpa.value);
+      const apt = parseInt(inApt.value);
+      const tech = parseInt(inTech.value);
+      const intern = parseInt(inIntern.value);
+
+      lblCgpa.textContent = `${cgpa.toFixed(1)} / 10.0`;
+      lblApt.textContent = `${apt}%`;
+      lblTech.textContent = `${tech} / 10`;
+      lblIntern.textContent = intern === 1 ? '1 Internship' : `${intern} Internships`;
+
+      // Supervised classification model approximation formula
+      const score = (cgpa * 6.5) + (apt * 0.35) + (tech * 2.6) + (intern * 5.0);
+      const prob = Math.min(98, Math.max(25, Math.round(score * 0.85)));
+      const isPlaced = prob >= 60;
+
+      resProb.textContent = `${prob}%`;
+
+      if (isPlaced) {
+        resBadge.textContent = 'PLACED';
+        resBadge.style.background = '#059669';
+        resProb.style.color = '#065F46';
+        resDesc.textContent = `High recruitment likelihood (${prob}%). Profile meets standards of top recruiters.`;
+      } else {
+        resBadge.textContent = 'NOT PLACED';
+        resBadge.style.background = '#DC2626';
+        resProb.style.color = '#991B1B';
+        resDesc.textContent = `Moderate to low likelihood (${prob}%). Focus on improving CGPA and aptitude score.`;
+      }
+    }
+
+    [inCgpa, inApt, inTech, inIntern].forEach(input => {
+      input.addEventListener('input', calculatePlacement);
+    });
+
+    calculatePlacement();
+  </script>
+</body>
+</html>

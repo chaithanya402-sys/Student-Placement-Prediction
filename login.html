@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Student Placement Prediction System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-navy: #172B4D;
+      --primary-blue: #2563EB;
+      --primary-blue-hover: #1D4ED8;
+      --primary-blue-light: #EFF6FF;
+      --teal-accent: #0D9488;
+      --border-subtle: #E2E8F0;
+      --text-muted: #64748B;
+      --text-dark: #172B4D;
+      --success-green: #16A34A;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      overflow-y: auto;
+      height: auto;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #F8FAFC;
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 1100px;
+      min-height: 640px;
+      background: #FFFFFF;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Left Side Showcase */
+    .auth-showcase-panel {
+      position: relative;
+      background: linear-gradient(145deg, #172B4D 0%, #1E3A8A 55%, #0F172A 100%);
+      background-size: cover;
+      background-position: center;
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #FFFFFF;
+    }
+
+    .showcase-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 12px;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .showcase-mid-content h2 {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .showcase-mid-content p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      max-width: 380px;
+      margin-bottom: 28px;
+    }
+
+    .showcase-metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .showcase-metric-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .showcase-metric-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #38BDF8;
+    }
+
+    .showcase-metric-lbl {
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 2px;
+    }
+
+    .showcase-testimonial-box {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .testimonial-quote {
+      font-size: 12.5px;
+      font-style: italic;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 12px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .author-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #10B981;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .author-info-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .author-info-role {
+      font-size: 10.5px;
+      color: #A7F3D0;
+    }
+
+    /* Right Side Login Form */
+    .auth-form-panel {
+      padding: 44px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #FFFFFF;
+      position: relative;
+    }
+
+    .top-back-link {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #64748B;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .top-back-link:hover {
+      color: var(--primary-green);
+    }
+
+    .auth-brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .auth-header-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0F172A;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .auth-header-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    /* Role Switcher Tabs */
+    .role-tabs-wrap {
+      display: flex;
+      background: #F1F5F9;
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      gap: 4px;
+    }
+
+    .role-tab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: #64748B;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .role-tab-btn.active {
+      background: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Quick Demo Login Chips */
+    .demo-chips-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      padding: 10px 14px;
+      background: #F8FAFC;
+      border: 1px dashed #CBD5E1;
+      border-radius: 10px;
+    }
+
+    .demo-chips-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .btn-demo-chip {
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #CBD5E1;
+      background: #FFFFFF;
+      font-size: 11px;
+      font-weight: 700;
+      color: #1E293B;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-demo-chip:hover {
+      background: var(--primary-blue-light);
+      border-color: var(--primary-blue);
+      color: var(--primary-blue);
+    }
+
+    /* Form Fields */
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .input-field-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-field-icon {
+      position: absolute;
+      left: 14px;
+      font-size: 14px;
+      color: #94A3B8;
+    }
+
+    .auth-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 40px 0 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      font-size: 13.5px;
+      color: #0F172A;
+      background: #FFFFFF;
+      outline: none;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary-green);
+      box-shadow: 0 0 0 3px rgba(0, 143, 104, 0.15);
+    }
+
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      color: #94A3B8;
+      padding: 4px;
+    }
+
+    .form-options-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      margin-top: 2px;
+    }
+
+    .remember-me-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #475569;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .forgot-pwd-link {
+      color: var(--primary-blue);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .forgot-pwd-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Submit Button */
+    .btn-submit-login {
+      height: 46px;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary-blue);
+      color: #FFFFFF;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      margin-top: 6px;
+    }
+
+    .btn-submit-login:hover {
+      background: var(--primary-blue-hover);
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* Divider */
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      margin: 18px 0;
+      color: #94A3B8;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .auth-divider::before, .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #E2E8F0;
+    }
+
+    .auth-divider span {
+      padding: 0 12px;
+    }
+
+    /* SSO Button */
+    .btn-sso-login {
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+      color: #334155;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-sso-login:hover {
+      background: #F8FAFC;
+      border-color: #CBD5E1;
+    }
+
+    .guest-access-link {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      color: #64748B;
+    }
+
+    .guest-access-link a {
+      color: var(--primary-green);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .guest-access-link a:hover {
+      text-decoration: underline;
+    }
+
+    /* Alert Notice */
+    .login-alert {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .login-alert.success {
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .login-alert.error {
+      background: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .auth-container {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+      }
+      .auth-showcase-panel {
+        display: none;
+      }
+      .auth-form-panel {
+        padding: 36px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-container">
+
+    <!-- Left Showcase Panel -->
+    <div class="auth-showcase-panel">
+      <div>
+        <div class="showcase-top-badge">
+          <span>✨</span>
+          <span>AI Placement Engine v2.4</span>
+        </div>
+      </div>
+
+      <div class="showcase-mid-content">
+        <h2>Empowering Campus Careers with Machine Learning.</h2>
+        <p>A supervised classification platform evaluating academic profiles, skill proficiencies, and aptitude metrics to guide students toward placement success.</p>
+
+        <div class="showcase-metrics-row">
+          <div class="showcase-metric-box">
+            <div class="showcase-metric-val">89.2%</div>
+            <div class="showcase-metric-lbl">Accuracy</div>
+          </div>
+          <div class="showcase-metric-box">
+            <div class="showcase-metric-val">892</div>
+            <div class="showcase-metric-lbl">Placed</div>
+          </div>
+          <div class="showcase-metric-box">
+            <div class="showcase-metric-val">71.5%</div>
+            <div class="showcase-metric-lbl">Recruited</div>
+          </div>
+        </div>
+
+        <div class="showcase-testimonial-box">
+          <div class="testimonial-quote">
+            "The What-If Simulator helped me target a 75+ Aptitude score. I was successfully placed in TCS Digital during campus recruitment!"
+          </div>
+          <div class="testimonial-author">
+            <div class="author-avatar">PN</div>
+            <div>
+              <div class="author-info-name">Priya Nair</div>
+              <div class="author-info-role">CSE Final Year • Placed at TCS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 11px; color: rgba(255, 255, 255, 0.65);">
+        🔒 University Single Sign-On (SSO) & Role-Based Access Control
+      </div>
+    </div>
+
+    <!-- Right Login Form Panel -->
+    <div class="auth-form-panel">
+      <a href="landing.html" class="top-back-link">
+        <span>←</span>
+        <span>Back to Home</span>
+      </a>
+
+      <div class="auth-brand-logo">
+        <span style="font-size: 22px;">🎓</span>
+        <span style="font-weight: 800; font-size: 15px; color: #0F172A;">Student Placement Prediction</span>
+      </div>
+
+      <h1 class="auth-header-title">Welcome Back</h1>
+      <p class="auth-header-subtitle">Sign in to access your placement dashboard and predictive insights.</p>
+
+      <!-- Role Switcher Tabs -->
+      <div class="role-tabs-wrap">
+        <button type="button" class="role-tab-btn active" data-role="student" onclick="setRole('student')">
+          <span>👨‍🎓</span>
+          <span>Student</span>
+        </button>
+        <button type="button" class="role-tab-btn" data-role="faculty" onclick="setRole('faculty')">
+          <span>👨‍🏫</span>
+          <span>Faculty Mentor</span>
+        </button>
+        <button type="button" class="role-tab-btn" data-role="officer" onclick="setRole('officer')">
+          <span>🏛️</span>
+          <span>T&P Officer</span>
+        </button>
+      </div>
+
+      <!-- Quick Demo Login Helpers -->
+      <div class="demo-chips-box" style="flex-wrap: wrap; gap: 6px;">
+        <span class="demo-chips-label">Quick 1-Click Demo:</span>
+        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('student')">👨‍🎓 Aditya Verma (Student)</button>
+        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('faculty')">👨‍🏫 Dr. Rajesh (Faculty)</button>
+        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('officer')">🏛️ Prof. Nair (T&P Officer)</button>
+      </div>
+
+      <!-- Alert Notification -->
+      <div class="login-alert" id="login-alert-box"></div>
+
+      <!-- Login Form -->
+      <form class="auth-form" id="login-form" onsubmit="handleLoginSubmit(event)">
+        <div class="input-group">
+          <label class="input-label" for="login-email">College Email or Roll Number</label>
+          <div class="input-field-wrap">
+            <span class="input-field-icon">✉</span>
+            <input type="text" id="login-email" class="auth-input" placeholder="john@college.edu" value="john@college.edu" required>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="login-password">Password</label>
+          <div class="input-field-wrap">
+            <span class="input-field-icon">🔒</span>
+            <input type="password" id="login-password" class="auth-input" placeholder="••••••••••••" value="student123" required>
+            <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password">👁</button>
+          </div>
+        </div>
+
+        <div class="form-options-row">
+          <label class="remember-me-label">
+            <input type="checkbox" id="remember-me-check" checked>
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-pwd-link" onclick="handleForgotPassword(event)">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-submit-login" id="btn-submit">
+          <span id="btn-submit-icon">➔</span>
+          <span id="btn-submit-text">Sign In to Dashboard</span>
+        </button>
+      </form>
+
+      <div class="auth-divider">
+        <span>Or continue with</span>
+      </div>
+
+      <button type="button" class="btn-sso-login" onclick="handleSSOLogin()">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+        <span>University Google Workspace / SSO</span>
+      </button>
+
+      <div class="guest-access-link">
+        <span>Prefer to explore as guest? </span>
+        <a href="index.html#/dashboard">Launch Live Dashboard &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let activeRole = 'student';
+
+    const roleCreds = {
+      student: {
+        email: 'aditya.verma@college.edu',
+        password: 'student123',
+        redirect: 'index.html#/student/overview'
+      },
+      faculty: {
+        email: 'dr.rajesh.mentor@college.edu',
+        password: 'mentor2026',
+        redirect: 'index.html#/faculty/overview'
+      },
+      officer: {
+        email: 'placement.cell@college.edu',
+        password: 'placement2026',
+        redirect: 'index.html#/officer/overview'
+      }
+    };
+
+    function setRole(role) {
+      activeRole = role;
+      document.querySelectorAll('.role-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-role') === role);
+      });
+
+      const emailInput = document.getElementById('login-email');
+      const passInput = document.getElementById('login-password');
+
+      if (roleCreds[role]) {
+        emailInput.value = roleCreds[role].email;
+        passInput.value = roleCreds[role].password;
+      }
+    }
+
+    function quickDemoLogin(role) {
+      setRole(role);
+      showAlert(`Logging in as Demo ${role.charAt(0).toUpperCase() + role.slice(1)}...`, 'success');
+      setTimeout(() => {
+        localStorage.setItem('spp_user_email', roleCreds[role].email);
+        localStorage.setItem('spp_user_role', role);
+        window.location.href = roleCreds[role].redirect;
+      }, 500);
+    }
+
+    function fillDemo(type) {
+      quickDemoLogin(type);
+    }
+
+    function togglePasswordVisibility() {
+      const pwd = document.getElementById('login-password');
+      if (pwd.type === 'password') {
+        pwd.type = 'text';
+      } else {
+        pwd.type = 'password';
+      }
+    }
+
+    function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value || 'your registered email';
+      showAlert(`Password reset link sent to ${email}. Please check your inbox.`, 'success');
+    }
+
+    function showAlert(msg, type) {
+      const alertBox = document.getElementById('login-alert-box');
+      alertBox.textContent = msg;
+      alertBox.className = `login-alert ${type}`;
+      alertBox.style.display = 'block';
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pwd = document.getElementById('login-password').value;
+
+      if (!email || !pwd) {
+        showAlert('Please enter both email and password.', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit');
+      const submitText = document.getElementById('btn-submit-text');
+      const submitIcon = document.getElementById('btn-submit-icon');
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Authenticating...';
+      submitIcon.textContent = '⏳';
+
+      showAlert('Authentication successful! Loading placement dashboard...', 'success');
+
+      setTimeout(() => {
+        localStorage.setItem('spp_user_email', email);
+        localStorage.setItem('spp_user_role', activeRole);
+        const targetUrl = roleCreds[activeRole] ? roleCreds[activeRole].redirect : 'index.html#/student/overview';
+        window.location.href = targetUrl;
+      }, 600);
+    }
+
+    function handleSSOLogin() {
+      showAlert('SSO Provider connected. Logging in as University User...', 'success');
+      setTimeout(() => {
+        localStorage.setItem('spp_user_role', activeRole);
+        const targetUrl = roleCreds[activeRole] ? roleCreds[activeRole].redirect : 'index.html#/student/overview';
+        window.location.href = targetUrl;
+      }, 600);
+    }
+  </script>
+</body>
+</html>

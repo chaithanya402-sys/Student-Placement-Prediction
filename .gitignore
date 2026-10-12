@@ -1,0 +1,9 @@
+# Logs and temporary files
+*.log
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Scratch and inspection dumps
+dump.html
+chrome_dom.html
