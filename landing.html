@@ -7,6 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    // Seamless routing: If loaded with a dashboard hash route (e.g. #/student/overview), forward directly to index.html
+    if (window.location.hash && (
+      window.location.hash.startsWith('#/student') ||
+      window.location.hash.startsWith('#/faculty') ||
+      window.location.hash.startsWith('#/officer') ||
+      window.location.hash.startsWith('#/dashboard') ||
+      window.location.hash.startsWith('#/what-if')
+    )) {
+      window.location.replace('index.html' + window.location.hash);
+    }
+  </script>
   <style>
     /* Dedicated Landing Page Styles */
     :root {
@@ -811,6 +823,7 @@
 
       <div class="landing-nav-actions">
         <a href="login.html" class="btn-nav-login">Sign In</a>
+        <a href="login.html?mode=register" class="btn-nav-login" style="background: var(--primary-green-light); color: var(--primary-green); border-color: rgba(0, 143, 104, 0.3);">Register</a>
         <a href="index.html#/dashboard" class="btn-nav-dashboard">
           <span>🚀</span>
           <span>Launch Dashboard</span>
@@ -844,7 +857,11 @@
       </a>
       <a href="login.html" class="btn-hero-secondary">
         <span>🔐</span>
-        <span>Student & Faculty Portal</span>
+        <span>Sign In to Portal</span>
+      </a>
+      <a href="login.html?mode=register" class="btn-hero-secondary" style="border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.12);">
+        <span>📝</span>
+        <span>Register Account</span>
       </a>
     </div>
 
@@ -1123,6 +1140,10 @@
           <span>🔐</span>
           <span>Sign In to Portal</span>
         </a>
+        <a href="login.html?mode=register" class="btn-hero-secondary" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.4);">
+          <span>📝</span>
+          <span>Register New Account</span>
+        </a>
       </div>
     </div>
   </section>
@@ -1139,19 +1160,20 @@
         <h5>Quick Links</h5>
         <ul>
           <li><a href="landing.html">Home</a></li>
-          <li><a href="index.html#/dashboard">Main Dashboard</a></li>
           <li><a href="login.html">Sign In Portal</a></li>
+          <li><a href="login.html?mode=register">Create Account</a></li>
+          <li><a href="index.html#/dashboard">Main Dashboard</a></li>
           <li><a href="index.html#/what-if">What-If Simulator</a></li>
         </ul>
       </div>
 
       <div class="footer-col">
-        <h5>Modules</h5>
+        <h5>Portal Access</h5>
         <ul>
-          <li><a href="index.html#/students">Student Data</a></li>
-          <li><a href="index.html#/skill-gap-analysis">Skill Gap Analysis</a></li>
-          <li><a href="index.html#/resume-analyzer">Resume Analyzer</a></li>
-          <li><a href="index.html#/batch-prediction">Batch Prediction</a></li>
+          <li><a href="login.html?role=student">Student Portal</a></li>
+          <li><a href="login.html?role=faculty">Faculty Mentor Portal</a></li>
+          <li><a href="login.html?role=officer">T&P Officer Portal</a></li>
+          <li><a href="index.html#/student/profile">Student Profile</a></li>
         </ul>
       </div>
 

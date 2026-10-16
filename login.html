@@ -1028,6 +1028,21 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       updateCloudStatusIndicator();
+
+      // Support deep linking to register or sign-in modes and preselected roles
+      const params = new URLSearchParams(window.location.search);
+      const hash = (window.location.hash || '').toLowerCase();
+
+      if (params.get('mode') === 'register' || hash === '#register') {
+        switchAuthMode('register');
+      } else if (params.get('mode') === 'signin' || hash === '#signin') {
+        switchAuthMode('signin');
+      }
+
+      const roleParam = params.get('role');
+      if (roleParam && ['student', 'faculty', 'officer'].includes(roleParam)) {
+        setSignInRole(roleParam);
+      }
     });
 
     function updateCloudStatusIndicator() {
