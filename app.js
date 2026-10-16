@@ -362,7 +362,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (tasksContainer) {
       if (myTasks.length === 0) {
-        tasksContainer.innerHTML = `<p style="font-size: 12.5px; color: var(--text-muted); padding: 12px 0;">No active tasks assigned by mentor.</p>`;
+        tasksContainer.innerHTML = `
+          <div class="empty-state-card">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-title">No Active Tasks Assigned</div>
+            <div class="empty-state-desc">You are all caught up! When your faculty mentor assigns new preparation tasks or mock practice, they will appear here.</div>
+            <button class="btn-outline btn-sm" onclick="navigateToRoute('/student/skills')">Explore Skill Benchmarks</button>
+          </div>
+        `;
       } else {
         tasksContainer.innerHTML = myTasks.slice(0, 4).map(task => `
           <div class="task-row-card ${task.status === 'Completed' ? 'done' : ''}">
@@ -424,7 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const overviewAppsContainer = document.getElementById('student-overview-apps-list');
     if (overviewAppsContainer) {
       if (myApps.length === 0) {
-        overviewAppsContainer.innerHTML = `<p style="font-size: 12.5px; color: var(--text-muted); padding: 14px 0;">No active applications submitted yet.</p>`;
+        overviewAppsContainer.innerHTML = `
+          <div class="empty-state-card">
+            <div class="empty-state-icon">💼</div>
+            <div class="empty-state-title">No Drive Applications Yet</div>
+            <div class="empty-state-desc">You haven't submitted any applications. Browse the open recruitment drives matching your eligibility cutoff.</div>
+            <button class="btn-primary btn-sm" onclick="navigateToRoute('/student/jobs')">Explore Campus Drives</button>
+          </div>
+        `;
       } else {
         overviewAppsContainer.innerHTML = myApps.slice(0, 4).map(app => {
           let badgeClass = 'blue';
@@ -490,7 +504,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const appliedTbody = document.getElementById('student-applied-table-body');
     if (appliedTbody) {
       if (myApps.length === 0) {
-        appliedTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 18px;">No drive applications submitted yet.</td></tr>`;
+        appliedTbody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state-table">
+                <span style="font-size: 26px;">📁</span>
+                <span style="font-weight: 700; color: var(--text-navy); font-size: 13.5px;">No applications submitted yet</span>
+                <span style="font-size: 11.5px; color: var(--text-muted);">Your recruitment applications will be listed here with live interview statuses.</span>
+                <button class="btn-primary btn-sm" style="margin-top: 6px;" onclick="switchStudentDriveTab('drives')">View Open Drives</button>
+              </div>
+            </td>
+          </tr>
+        `;
       } else {
         appliedTbody.innerHTML = myApps.map(app => {
           let badgeClass = 'blue';
@@ -934,7 +959,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const renderTaskItems = (container) => {
       if (!container) return;
       if (tasks.length === 0) {
-        container.innerHTML = `<p style="font-size: 12px; color: var(--text-muted); padding: 10px 0;">No assigned tasks recorded.</p>`;
+        container.innerHTML = `
+          <div class="empty-state-card" style="padding: 24px 16px;">
+            <div class="empty-state-icon" style="width: 40px; height: 40px; font-size: 18px;">📌</div>
+            <div class="empty-state-title">No Assigned Tasks</div>
+            <div class="empty-state-desc">Assign specific coding, aptitude, or mock interview tasks to guide your student mentees.</div>
+            <button class="btn-primary btn-sm" onclick="openAssignTaskModal()">Assign Mentoring Task</button>
+          </div>
+        `;
       } else {
         container.innerHTML = tasks.map(t => `
           <div class="task-row-card ${t.status === 'Completed' ? 'done' : ''}">
@@ -960,7 +992,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const notesHistoryContainer = document.getElementById('faculty-notes-history-list');
     if (notesHistoryContainer) {
       if (notes.length === 0) {
-        notesHistoryContainer.innerHTML = `<p style="font-size: 11.5px; color: var(--text-muted);">No counseling notes recorded yet.</p>`;
+        notesHistoryContainer.innerHTML = `
+          <div class="empty-state-card" style="padding: 20px 16px;">
+            <div class="empty-state-icon" style="width: 36px; height: 36px; font-size: 16px;">📝</div>
+            <div class="empty-state-title" style="font-size: 13px;">No Counseling Notes</div>
+            <div class="empty-state-desc" style="font-size: 11.5px;">Record 1-on-1 counseling feedback and placement progress notes for your assigned mentees.</div>
+          </div>
+        `;
       } else {
         notesHistoryContainer.innerHTML = notes.slice(0, 5).map(n => `
           <div style="padding: 10px; background: #F8FAFC; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 6px; font-size: 12px;">
@@ -1138,14 +1176,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const student = store.data.roles.student;
     const res = store.applyToDrive(student.id, driveId);
     if (res.success) {
-      alert(`Application submitted successfully! Your profile has been sent to the T&P Cell.`);
+      window.showToast?.('✓ Application submitted successfully! Your profile has been sent to the T&P Cell.', 'success');
     } else {
-      alert(res.message);
+      window.showToast?.(res.message, 'error');
     }
   };
 
   window.toggleTaskStatus = function(taskId) {
-    store.toggleTaskStatus(taskId);
+    const newStatus = store.toggleTaskStatus(taskId);
+    window.showToast?.(newStatus === 'Completed' ? '✓ Task marked as Completed!' : 'Task marked as Pending.', 'success');
   };
 
   window.switchStudentDriveTab = function(tab) {
@@ -1207,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     store.assignTask({ studentId, title, dueDate, priority, notes });
     closeModal('modal-assign-task');
-    alert(`Task "${title}" assigned to mentee.`);
+    window.showToast?.(`✓ Task "${title}" assigned to mentee successfully.`, 'success');
   };
 
   window.handleSaveMentorNote = function(e) {
@@ -1217,7 +1256,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     store.addMentorNote(studentId, noteText);
     document.getElementById('note-content-input').value = '';
-    alert('Meeting note saved.');
+    window.showToast?.('✓ Counseling meeting note recorded.', 'success');
   };
 
   window.openCreateDriveModal = function() {
@@ -1247,11 +1286,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     closeModal('modal-create-drive');
-    alert(`Drive for ${company} published successfully!`);
+    window.showToast?.(`✓ Drive for ${company} published successfully!`, 'success');
   };
 
   window.setAppStatus = function(appId, newStatus) {
     store.updateApplicationStatus(appId, newStatus);
+    window.showToast?.(`Application status updated to "${newStatus}".`, 'info');
   };
 
   window.openIssueOfferModal = function(appId, studentName, company) {
@@ -1271,7 +1311,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     store.updateApplicationStatus(appId, 'Offered', packageLPA);
     closeModal('modal-issue-offer');
-    alert(`Official Offer Letter issued! Candidate marked as Placed.`);
+    window.showToast?.(`🎉 Official Offer Letter issued! Candidate marked as Placed.`, 'success');
   };
 
   window.openModal = function(modalId) {
@@ -1473,12 +1513,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (file) {
       const filenameLabel = document.getElementById('resume-filename');
       if (filenameLabel) filenameLabel.textContent = file.name;
-      alert(`Resume "${file.name}" uploaded and parsed successfully! ATS Score: 82/100.`);
+      window.showToast?.(`✓ Resume "${file.name}" uploaded and parsed! ATS Score: 82/100 (Strong Match).`, 'success');
     }
   };
 
   window.showNotificationsAlert = function() {
-    alert(`Campus Placement Notifications:\n\n1. Microsoft Cloud Drive application deadline is Oct 28.\n2. Dr. Rajesh Sharma assigned a new LeetCode preparation task.\n3. Mock Technical Interview rounds start next Monday.`);
+    window.showToast?.('🔔 Latest Announcement: Microsoft Cloud Drive application deadline is Oct 28.', 'info');
   };
 
   // --- THEME TOGGLE (LIGHT / DARK) ---
@@ -1805,7 +1845,26 @@ document.addEventListener('DOMContentLoaded', () => {
     backdropEl?.classList.remove('active');
   }
 
-  document.getElementById('btn-toggle-sidebar')?.addEventListener('click', openMobileSidebar);
+  function handleSidebarToggle() {
+    if (window.innerWidth <= 992) {
+      if (sidebarEl?.classList.contains('mobile-open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    } else {
+      document.body.classList.toggle('sidebar-collapsed');
+      const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+      localStorage.setItem('spp_sidebar_collapsed', isCollapsed ? 'true' : 'false');
+    }
+  }
+
+  // Restore desktop collapsed preference
+  if (window.innerWidth > 992 && localStorage.getItem('spp_sidebar_collapsed') === 'true') {
+    document.body.classList.add('sidebar-collapsed');
+  }
+
+  document.getElementById('btn-toggle-sidebar')?.addEventListener('click', handleSidebarToggle);
   document.getElementById('btn-close-sidebar')?.addEventListener('click', closeMobileSidebar);
   backdropEl?.addEventListener('click', closeMobileSidebar);
 
