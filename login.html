@@ -3,10 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In | Student Placement Prediction System</title>
+  <title>Sign In & Register | Student Placement Prediction System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Supabase Official JS SDK via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Application Supabase Auth Client -->
+  <script src="supabaseClient.js"></script>
+
   <style>
     :root {
       --primary-navy: #172B4D;
@@ -18,6 +24,8 @@
       --text-muted: #64748B;
       --text-dark: #172B4D;
       --success-green: #16A34A;
+      --error-red: #DC2626;
+      --warning-amber: #D97706;
     }
 
     * {
@@ -40,19 +48,19 @@
       align-items: center;
       justify-content: center;
       margin: 0;
-      padding: 20px;
+      padding: 24px 20px;
       overflow-y: auto;
     }
 
     .auth-container {
       width: 100%;
-      max-width: 1100px;
-      min-height: 640px;
+      max-width: 1140px;
+      min-height: 680px;
       background: #FFFFFF;
       border-radius: 24px;
       box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
       display: grid;
-      grid-template-columns: 1fr 1.15fr;
+      grid-template-columns: 1fr 1.25fr;
       overflow: hidden;
       border: 1px solid var(--border-subtle);
     }
@@ -104,43 +112,44 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-bottom: 28px;
+      margin-bottom: 30px;
     }
 
     .showcase-metric-box {
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 14px;
-      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 12px;
+      padding: 14px 10px;
       text-align: center;
     }
 
     .showcase-metric-val {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 800;
-      color: #38BDF8;
+      color: #FFFFFF;
     }
 
     .showcase-metric-lbl {
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 11px;
       color: rgba(255, 255, 255, 0.75);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-top: 2px;
+      font-weight: 600;
     }
 
     .showcase-testimonial-box {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 16px;
-      padding: 18px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 24px;
     }
 
     .testimonial-quote {
       font-size: 12.5px;
-      font-style: italic;
       line-height: 1.5;
+      font-style: italic;
       color: rgba(255, 255, 255, 0.95);
       margin-bottom: 12px;
     }
@@ -152,16 +161,16 @@
     }
 
     .author-avatar {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: #10B981;
+      background: var(--teal-accent);
       color: #FFFFFF;
-      font-size: 11px;
-      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
     }
 
     .author-info-name {
@@ -171,44 +180,76 @@
     }
 
     .author-info-role {
-      font-size: 10.5px;
-      color: #A7F3D0;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
     }
 
-    /* Right Side Login Form */
+    /* Right Form Panel */
     .auth-form-panel {
-      padding: 44px 48px;
+      padding: 40px 44px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      background: #FFFFFF;
-      position: relative;
+      justify-content: flex-start;
+      overflow-y: auto;
+      max-height: 85vh;
+    }
+
+    .top-action-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
     .top-back-link {
-      position: absolute;
-      top: 24px;
-      right: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 12.5px;
-      font-weight: 700;
-      color: #64748B;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      font-weight: 600;
       transition: color 0.15s ease;
     }
 
     .top-back-link:hover {
-      color: var(--primary-green);
+      color: var(--primary-blue);
     }
+
+    .btn-config-gear {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-config-gear:hover {
+      background: #E2E8F0;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .status-dot.online { background: #16A34A; }
+    .status-dot.offline { background: #94A3B8; }
 
     .auth-brand-logo {
       display: flex;
       align-items: center;
       gap: 8px;
       font-size: 18px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .auth-header-title {
@@ -216,33 +257,33 @@
       font-weight: 800;
       color: #0F172A;
       letter-spacing: -0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .auth-header-subtitle {
-      font-size: 13.5px;
+      font-size: 13px;
       color: var(--text-muted);
-      margin-bottom: 24px;
+      margin-bottom: 18px;
     }
 
-    /* Role Switcher Tabs */
-    .role-tabs-wrap {
-      display: flex;
+    /* Main Tab Switcher: Sign In vs Create Account */
+    .auth-mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       background: #F1F5F9;
       padding: 4px;
       border-radius: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       gap: 4px;
     }
 
-    .role-tab-btn {
-      flex: 1;
-      padding: 8px 10px;
+    .auth-mode-btn {
+      padding: 9px 12px;
       border-radius: 8px;
       border: none;
       background: transparent;
       color: #64748B;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -252,36 +293,72 @@
       transition: all 0.15s ease;
     }
 
+    .auth-mode-btn.active {
+      background: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Role Switcher Tabs */
+    .role-tabs-wrap {
+      display: flex;
+      background: #F8FAFC;
+      border: 1px solid var(--border-subtle);
+      padding: 4px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      gap: 4px;
+    }
+
+    .role-tab-btn {
+      flex: 1;
+      padding: 7px 8px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #64748B;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s ease;
+    }
+
     .role-tab-btn.active {
       background: #FFFFFF;
       color: #0F172A;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      border: 1px solid #CBD5E1;
     }
 
     /* Quick Demo Login Chips */
     .demo-chips-box {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 22px;
-      padding: 10px 14px;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
       background: #F8FAFC;
       border: 1px dashed #CBD5E1;
       border-radius: 10px;
     }
 
     .demo-chips-label {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       color: #475569;
     }
 
     .btn-demo-chip {
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
       border: 1px solid #CBD5E1;
       background: #FFFFFF;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
       color: #1E293B;
       cursor: pointer;
@@ -298,19 +375,28 @@
     .auth-form {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
+    }
+
+    .input-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
 
     .input-group {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
     }
 
     .input-label {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 700;
       color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .input-field-wrap {
@@ -321,18 +407,18 @@
 
     .input-field-icon {
       position: absolute;
-      left: 14px;
-      font-size: 14px;
+      left: 12px;
+      font-size: 13px;
       color: #94A3B8;
     }
 
-    .auth-input {
+    .auth-input, .auth-select {
       width: 100%;
-      height: 44px;
-      padding: 0 40px 0 38px;
+      height: 42px;
+      padding: 0 36px 0 34px;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
-      font-size: 13.5px;
+      font-size: 13px;
       color: #0F172A;
       background: #FFFFFF;
       outline: none;
@@ -340,14 +426,19 @@
       font-family: inherit;
     }
 
-    .auth-input:focus {
-      border-color: var(--primary-green);
-      box-shadow: 0 0 0 3px rgba(0, 143, 104, 0.15);
+    .auth-select {
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .auth-input:focus, .auth-select:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
     .toggle-pwd-btn {
       position: absolute;
-      right: 12px;
+      right: 10px;
       background: none;
       border: none;
       cursor: pointer;
@@ -356,11 +447,42 @@
       padding: 4px;
     }
 
+    /* Protected Faculty Code Banner */
+    .faculty-protection-box {
+      display: none;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 4px;
+    }
+
+    .faculty-protection-box.active {
+      display: block;
+    }
+
+    .faculty-protection-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #92400E;
+      margin-bottom: 6px;
+    }
+
+    .faculty-protection-desc {
+      font-size: 11px;
+      color: #78350F;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
     .form-options-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12.5px;
+      font-size: 12px;
       margin-top: 2px;
     }
 
@@ -385,12 +507,12 @@
 
     /* Submit Button */
     .btn-submit-login {
-      height: 46px;
+      height: 44px;
       border-radius: 12px;
       border: none;
       background: var(--primary-blue);
       color: #FFFFFF;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -399,7 +521,7 @@
       gap: 8px;
       transition: all 0.15s ease;
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .btn-submit-login:hover {
@@ -408,13 +530,19 @@
       transform: translateY(-1px);
     }
 
+    .btn-submit-login:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Divider */
     .auth-divider {
       display: flex;
       align-items: center;
-      margin: 18px 0;
+      margin: 16px 0;
       color: #94A3B8;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -428,17 +556,17 @@
     }
 
     .auth-divider span {
-      padding: 0 12px;
+      padding: 0 10px;
     }
 
     /* SSO Button */
     .btn-sso-login {
-      height: 42px;
+      height: 40px;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
       background: #FFFFFF;
       color: #334155;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       display: flex;
       align-items: center;
@@ -456,13 +584,13 @@
 
     .guest-access-link {
       text-align: center;
-      margin-top: 18px;
-      font-size: 13px;
+      margin-top: 14px;
+      font-size: 12.5px;
       color: #64748B;
     }
 
     .guest-access-link a {
-      color: var(--primary-green);
+      color: var(--teal-accent);
       font-weight: 700;
       text-decoration: none;
     }
@@ -476,9 +604,10 @@
       display: none;
       padding: 10px 14px;
       border-radius: 8px;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       margin-bottom: 14px;
+      line-height: 1.4;
     }
 
     .login-alert.success {
@@ -493,17 +622,53 @@
       border: 1px solid #FECACA;
     }
 
+    .login-alert.info {
+      background: #EFF6FF;
+      color: #1E40AF;
+      border: 1px solid #BFDBFE;
+    }
+
+    /* Modal for Supabase Settings */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 520px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
     /* Responsive */
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .auth-container {
         grid-template-columns: 1fr;
-        max-width: 480px;
+        max-width: 520px;
       }
       .auth-showcase-panel {
         display: none;
       }
       .auth-form-panel {
-        padding: 36px 28px;
+        padding: 32px 24px;
+        max-height: none;
+      }
+      .input-row-2 {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -555,104 +720,293 @@
       </div>
 
       <div style="font-size: 11px; color: rgba(255, 255, 255, 0.65);">
-        🔒 University Single Sign-On (SSO) & Role-Based Access Control
+        🔒 Supabase Auth • Row Level Security (RLS) • Role Enforcement
       </div>
     </div>
 
-    <!-- Right Login Form Panel -->
+    <!-- Right Login / Register Panel -->
     <div class="auth-form-panel">
-      <a href="landing.html" class="top-back-link">
-        <span>←</span>
-        <span>Back to Home</span>
-      </a>
+      <div class="top-action-bar">
+        <a href="landing.html" class="top-back-link">
+          <span>←</span>
+          <span>Back to Home</span>
+        </a>
+        <button type="button" class="btn-config-gear" onclick="openSupabaseModal()" title="Configure Supabase Cloud Settings">
+          <span class="status-dot offline" id="cloud-status-dot"></span>
+          <span id="cloud-status-text">Supabase Config</span>
+        </button>
+      </div>
 
       <div class="auth-brand-logo">
         <span style="font-size: 22px;">🎓</span>
         <span style="font-weight: 800; font-size: 15px; color: #0F172A;">Student Placement Prediction</span>
       </div>
 
-      <h1 class="auth-header-title">Welcome Back</h1>
-      <p class="auth-header-subtitle">Sign in to access your placement dashboard and predictive insights.</p>
-
-      <!-- Role Switcher Tabs -->
-      <div class="role-tabs-wrap">
-        <button type="button" class="role-tab-btn active" data-role="student" onclick="setRole('student')">
-          <span>👨‍🎓</span>
-          <span>Student</span>
+      <!-- Mode Switcher Tabs: Sign In / Create Account -->
+      <div class="auth-mode-tabs">
+        <button type="button" class="auth-mode-btn active" id="tab-btn-signin" onclick="switchAuthMode('signin')">
+          <span>🔐</span>
+          <span>Sign In</span>
         </button>
-        <button type="button" class="role-tab-btn" data-role="faculty" onclick="setRole('faculty')">
-          <span>👨‍🏫</span>
-          <span>Faculty Mentor</span>
-        </button>
-        <button type="button" class="role-tab-btn" data-role="officer" onclick="setRole('officer')">
-          <span>🏛️</span>
-          <span>T&P Officer</span>
+        <button type="button" class="auth-mode-btn" id="tab-btn-register" onclick="switchAuthMode('register')">
+          <span>📝</span>
+          <span>Create Account</span>
         </button>
       </div>
 
-      <!-- Quick Demo Login Helpers -->
-      <div class="demo-chips-box" style="flex-wrap: wrap; gap: 6px;">
-        <span class="demo-chips-label">Quick 1-Click Demo:</span>
-        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('student')">👨‍🎓 Aditya Verma (Student)</button>
-        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('faculty')">👨‍🏫 Dr. Rajesh (Faculty)</button>
-        <button type="button" class="btn-demo-chip" onclick="quickDemoLogin('officer')">🏛️ Prof. Nair (T&P Officer)</button>
-      </div>
+      <!-- Header Titles (Dynamic) -->
+      <h1 class="auth-header-title" id="auth-main-title">Welcome Back</h1>
+      <p class="auth-header-subtitle" id="auth-main-subtitle">Sign in to access your placement dashboard and predictive insights.</p>
 
-      <!-- Alert Notification -->
+      <!-- Alert Notification Banner -->
       <div class="login-alert" id="login-alert-box"></div>
 
-      <!-- Login Form -->
-      <form class="auth-form" id="login-form" onsubmit="handleLoginSubmit(event)">
-        <div class="input-group">
-          <label class="input-label" for="login-email">College Email or Roll Number</label>
-          <div class="input-field-wrap">
-            <span class="input-field-icon">✉</span>
-            <input type="text" id="login-email" class="auth-input" placeholder="john@college.edu" value="john@college.edu" required>
+      <!-- ==========================================
+           FORM 1: SIGN IN (WITH PASSWORD VERIFICATION)
+           ========================================== -->
+      <div id="section-signin">
+        <!-- Role Switcher Tabs for Sign In -->
+        <div class="role-tabs-wrap">
+          <button type="button" class="role-tab-btn active" data-role="student" onclick="setSignInRole('student')">
+            <span>👨‍🎓</span>
+            <span>Student</span>
+          </button>
+          <button type="button" class="role-tab-btn" data-role="faculty" onclick="setSignInRole('faculty')">
+            <span>👨‍🏫</span>
+            <span>Faculty Mentor</span>
+          </button>
+          <button type="button" class="role-tab-btn" data-role="officer" onclick="setSignInRole('officer')">
+            <span>🏛️</span>
+            <span>T&P Officer</span>
+          </button>
+        </div>
+
+        <!-- Quick Demo Login Helpers -->
+        <div class="demo-chips-box">
+          <span class="demo-chips-label">Quick 1-Click Demo:</span>
+          <button type="button" class="btn-demo-chip" onclick="quickFillDemo('student')">👨‍🎓 Aditya (Student)</button>
+          <button type="button" class="btn-demo-chip" onclick="quickFillDemo('faculty')">👨‍🏫 Dr. Rajesh (Faculty)</button>
+          <button type="button" class="btn-demo-chip" onclick="quickFillDemo('officer')">🏛️ Prof. Nair (Officer)</button>
+        </div>
+
+        <!-- Sign In Form -->
+        <form class="auth-form" id="login-form" onsubmit="handleLoginSubmit(event)">
+          <div class="input-group">
+            <label class="input-label" for="login-email">College Email or Roll Number</label>
+            <div class="input-field-wrap">
+              <span class="input-field-icon">✉</span>
+              <input type="email" id="login-email" class="auth-input" placeholder="aditya.verma@college.edu" value="aditya.verma@college.edu" required>
+            </div>
           </div>
-        </div>
 
-        <div class="input-group">
-          <label class="input-label" for="login-password">Password</label>
-          <div class="input-field-wrap">
-            <span class="input-field-icon">🔒</span>
-            <input type="password" id="login-password" class="auth-input" placeholder="••••••••••••" value="student123" required>
-            <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility()" aria-label="Toggle password">👁</button>
+          <div class="input-group">
+            <label class="input-label" for="login-password">Password</label>
+            <div class="input-field-wrap">
+              <span class="input-field-icon">🔒</span>
+              <input type="password" id="login-password" class="auth-input" placeholder="••••••••••••" value="student123" required>
+              <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('login-password')" aria-label="Toggle password">👁</button>
+            </div>
           </div>
+
+          <div class="form-options-row">
+            <label class="remember-me-label">
+              <input type="checkbox" id="remember-me-check" checked>
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="forgot-pwd-link" onclick="handleForgotPassword(event)">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn-submit-login" id="btn-submit-signin">
+            <span id="btn-signin-icon">➔</span>
+            <span id="btn-signin-text">Sign In with Verified Credentials</span>
+          </button>
+        </form>
+
+        <div class="auth-divider">
+          <span>Or continue with</span>
         </div>
 
-        <div class="form-options-row">
-          <label class="remember-me-label">
-            <input type="checkbox" id="remember-me-check" checked>
-            <span>Remember me</span>
-          </label>
-          <a href="#" class="forgot-pwd-link" onclick="handleForgotPassword(event)">Forgot password?</a>
-        </div>
-
-        <button type="submit" class="btn-submit-login" id="btn-submit">
-          <span id="btn-submit-icon">➔</span>
-          <span id="btn-submit-text">Sign In to Dashboard</span>
+        <button type="button" class="btn-sso-login" onclick="handleSSOLogin()">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+          <span>University Google Workspace / SSO</span>
         </button>
-      </form>
 
-      <div class="auth-divider">
-        <span>Or continue with</span>
+        <div class="guest-access-link">
+          <span>Prefer to explore as guest? </span>
+          <a href="index.html#/dashboard">Launch Live Dashboard &rarr;</a>
+        </div>
       </div>
 
-      <button type="button" class="btn-sso-login" onclick="handleSSOLogin()">
-        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
-        <span>University Google Workspace / SSO</span>
-      </button>
+      <!-- ==========================================
+           FORM 2: CREATE ACCOUNT (WITH FACULTY PROTECTION)
+           ========================================== -->
+      <div id="section-register" style="display: none;">
+        <!-- Register Form -->
+        <form class="auth-form" id="register-form" onsubmit="handleRegisterSubmit(event)">
+          
+          <div class="input-row-2">
+            <div class="input-group">
+              <label class="input-label" for="reg-fullname">Full Name</label>
+              <div class="input-field-wrap">
+                <span class="input-field-icon">👤</span>
+                <input type="text" id="reg-fullname" class="auth-input" placeholder="e.g. Rahul Sharma" required>
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="reg-email">College Email</label>
+              <div class="input-field-wrap">
+                <span class="input-field-icon">✉</span>
+                <input type="email" id="reg-email" class="auth-input" placeholder="rahul@college.edu" required>
+              </div>
+            </div>
+          </div>
 
-      <div class="guest-access-link">
-        <span>Prefer to explore as guest? </span>
-        <a href="index.html#/dashboard">Launch Live Dashboard &rarr;</a>
+          <div class="input-row-2">
+            <div class="input-group">
+              <label class="input-label" for="reg-rollno">Roll No. / ID</label>
+              <div class="input-field-wrap">
+                <span class="input-field-icon">#</span>
+                <input type="text" id="reg-rollno" class="auth-input" placeholder="e.g. 21CSE115" required>
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="reg-dept">Department</label>
+              <select id="reg-dept" class="auth-select">
+                <option value="CSE">Computer Science & Eng. (CSE)</option>
+                <option value="IT">Information Technology (IT)</option>
+                <option value="ECE">Electronics & Comm. (ECE)</option>
+                <option value="EEE">Electrical & Electronics (EEE)</option>
+                <option value="MECH">Mechanical Eng. (MECH)</option>
+                <option value="CIVIL">Civil Eng. (CIVIL)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Role Selection (Default Student; Faculty is Protected) -->
+          <div class="input-group">
+            <label class="input-label">Account Role</label>
+            <div class="role-tabs-wrap" style="margin-bottom: 4px;">
+              <button type="button" class="role-tab-btn active" id="btn-reg-role-student" onclick="setRegisterRole('student')">
+                <span>👨‍🎓</span>
+                <span>Student (Open)</span>
+              </button>
+              <button type="button" class="role-tab-btn" id="btn-reg-role-faculty" onclick="setRegisterRole('faculty')">
+                <span>👨‍🏫</span>
+                <span>Faculty Mentor 🔒</span>
+              </button>
+              <button type="button" class="role-tab-btn" id="btn-reg-role-officer" onclick="setRegisterRole('officer')">
+                <span>🏛️</span>
+                <span>T&P Officer 🔒</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Protected Passcode Field for Faculty / Officer -->
+          <div class="faculty-protection-box" id="box-faculty-key">
+            <div class="faculty-protection-title">
+              <span>🔒</span>
+              <span id="protection-box-title">Institutional Faculty Verification Required</span>
+            </div>
+            <p class="faculty-protection-desc" id="protection-box-desc">
+              To prevent unauthorized faculty registration, enter your department's Institutional Verification Passcode (Default demo key: <code>FACULTY2026</code>).
+            </p>
+            <div class="input-field-wrap">
+              <span class="input-field-icon">🔑</span>
+              <input type="password" id="reg-faculty-key" class="auth-input" placeholder="Enter Institutional Passcode (e.g. FACULTY2026)">
+            </div>
+          </div>
+
+          <div class="input-row-2">
+            <div class="input-group">
+              <label class="input-label" for="reg-password">Password</label>
+              <div class="input-field-wrap">
+                <span class="input-field-icon">🔒</span>
+                <input type="password" id="reg-password" class="auth-input" placeholder="Min. 6 chars" required minlength="6">
+                <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('reg-password')" aria-label="Toggle password">👁</button>
+              </div>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="reg-confirm-password">Confirm Password</label>
+              <div class="input-field-wrap">
+                <span class="input-field-icon">🔒</span>
+                <input type="password" id="reg-confirm-password" class="auth-input" placeholder="Re-enter password" required minlength="6">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-options-row">
+            <label class="remember-me-label">
+              <input type="checkbox" id="reg-terms-check" required checked>
+              <span style="font-size: 11.5px;">I agree to institutional placement terms and policies</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-submit-login" id="btn-submit-register">
+            <span id="btn-reg-icon">📝</span>
+            <span id="btn-reg-text">Create Authenticated Account</span>
+          </button>
+        </form>
+
+        <div class="guest-access-link" style="margin-top: 14px;">
+          <span>Already have an account? </span>
+          <a href="javascript:void(0)" onclick="switchAuthMode('signin')">Sign In here &rarr;</a>
+        </div>
       </div>
+
     </div>
 
   </div>
 
+  <!-- ==========================================
+       SUPABASE CONFIGURATION MODAL
+       ========================================== -->
+  <div class="modal-overlay" id="modal-supabase-config" onclick="if(event.target === this) closeSupabaseModal()">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 22px;">⚡</span>
+          <div>
+            <h3 style="font-size: 17px; font-weight: 800; color: #0F172A;">Supabase Cloud Integration</h3>
+            <p style="font-size: 11.5px; color: #64748B;">Connect your Supabase project for real authentication & database RLS policies</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeSupabaseModal()" style="border: none; background: none; font-size: 18px; cursor: pointer; color: #64748B;">✕</button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="input-group">
+          <label class="input-label">Project URL</label>
+          <input type="text" id="input-supabase-url" class="auth-input" placeholder="https://your-project-id.supabase.co">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Anon / Public API Key</label>
+          <input type="password" id="input-supabase-key" class="auth-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Institutional Faculty Passcode</label>
+          <input type="text" id="input-faculty-passcode" class="auth-input" placeholder="FACULTY2026" value="FACULTY2026">
+          <span style="font-size: 11px; color: #64748B;">Used to verify authorized faculty and T&amp;P officer registrations.</span>
+        </div>
+
+        <div style="padding: 10px 12px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 11.5px; color: #475569;">
+          <strong>Database Policies Note:</strong> Execute the database migrations from <code>supabase_schema.sql</code> in your Supabase SQL Editor to activate tables, Row Level Security, and automated faculty protection triggers.
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+          <button type="button" class="btn-demo-chip" style="padding: 8px 14px; font-size: 12px;" onclick="testSupabaseConnection()">⚡ Test Connection</button>
+          <button type="button" class="btn-submit-login" style="margin-top: 0; padding: 0 16px; height: 38px; font-size: 12.5px;" onclick="saveSupabaseConfig()">Save Credentials</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION SCRIPTS -->
   <script>
-    let activeRole = 'student';
+    let activeAuthMode = 'signin';
+    let currentSignInRole = 'student';
+    let currentRegisterRole = 'student';
 
     const roleCreds = {
       student: {
@@ -672,9 +1026,52 @@
       }
     };
 
-    function setRole(role) {
-      activeRole = role;
-      document.querySelectorAll('.role-tab-btn').forEach(btn => {
+    document.addEventListener('DOMContentLoaded', () => {
+      updateCloudStatusIndicator();
+    });
+
+    function updateCloudStatusIndicator() {
+      const dot = document.getElementById('cloud-status-dot');
+      const text = document.getElementById('cloud-status-text');
+      if (window.SupabaseAuth && window.SupabaseAuth.isConfigured()) {
+        if (dot) dot.className = 'status-dot online';
+        if (text) text.textContent = 'Supabase Cloud Active';
+      } else {
+        if (dot) dot.className = 'status-dot offline';
+        if (text) text.textContent = 'Demo Mode (Strict Auth)';
+      }
+    }
+
+    function switchAuthMode(mode) {
+      activeAuthMode = mode;
+      const tabSignIn = document.getElementById('tab-btn-signin');
+      const tabRegister = document.getElementById('tab-btn-register');
+      const secSignIn = document.getElementById('section-signin');
+      const secRegister = document.getElementById('section-register');
+      const title = document.getElementById('auth-main-title');
+      const subtitle = document.getElementById('auth-main-subtitle');
+      clearAlert();
+
+      if (mode === 'signin') {
+        tabSignIn?.classList.add('active');
+        tabRegister?.classList.remove('active');
+        if (secSignIn) secSignIn.style.display = 'block';
+        if (secRegister) secRegister.style.display = 'none';
+        if (title) title.textContent = 'Welcome Back';
+        if (subtitle) subtitle.textContent = 'Sign in to access your placement dashboard and predictive insights.';
+      } else {
+        tabSignIn?.classList.remove('active');
+        tabRegister?.classList.add('active');
+        if (secSignIn) secSignIn.style.display = 'none';
+        if (secRegister) secRegister.style.display = 'block';
+        if (title) title.textContent = 'Create Authenticated Account';
+        if (subtitle) subtitle.textContent = 'Register with your college details to start your placement readiness track.';
+      }
+    }
+
+    function setSignInRole(role) {
+      currentSignInRole = role;
+      document.querySelectorAll('#section-signin .role-tab-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-role') === role);
       });
 
@@ -687,77 +1084,279 @@
       }
     }
 
-    function quickDemoLogin(role) {
-      setRole(role);
-      showAlert(`Logging in as Demo ${role.charAt(0).toUpperCase() + role.slice(1)}...`, 'success');
-      setTimeout(() => {
-        localStorage.setItem('spp_user_email', roleCreds[role].email);
-        localStorage.setItem('spp_user_role', role);
-        window.location.href = roleCreds[role].redirect;
-      }, 500);
-    }
+    function setRegisterRole(role) {
+      currentRegisterRole = role;
+      const btnStudent = document.getElementById('btn-reg-role-student');
+      const btnFaculty = document.getElementById('btn-reg-role-faculty');
+      const btnOfficer = document.getElementById('btn-reg-role-officer');
+      const boxFacultyKey = document.getElementById('box-faculty-key');
+      const keyTitle = document.getElementById('protection-box-title');
+      const keyDesc = document.getElementById('protection-box-desc');
 
-    function fillDemo(type) {
-      quickDemoLogin(type);
-    }
+      btnStudent?.classList.toggle('active', role === 'student');
+      btnFaculty?.classList.toggle('active', role === 'faculty');
+      btnOfficer?.classList.toggle('active', role === 'officer');
 
-    function togglePasswordVisibility() {
-      const pwd = document.getElementById('login-password');
-      if (pwd.type === 'password') {
-        pwd.type = 'text';
+      if (role === 'student') {
+        boxFacultyKey?.classList.remove('active');
       } else {
-        pwd.type = 'password';
+        boxFacultyKey?.classList.add('active');
+        if (role === 'faculty') {
+          if (keyTitle) keyTitle.textContent = 'Institutional Faculty Verification Required';
+          if (keyDesc) keyDesc.innerHTML = 'To prevent unauthorized faculty registration, enter your department Institutional Passcode (Demo key: <code>FACULTY2026</code>).';
+        } else {
+          if (keyTitle) keyTitle.textContent = 'T&P Officer Administrative Key Required';
+          if (keyDesc) keyDesc.innerHTML = 'Restricted administrative role. Enter the T&P Cell verification passcode (Demo key: <code>CAMPUS-FACULTY-2026</code>).';
+        }
+      }
+    }
+
+    function quickFillDemo(role) {
+      setSignInRole(role);
+      showAlert(`Loaded ${role.toUpperCase()} credentials. Click Sign In to verify.`, 'info');
+    }
+
+    function togglePasswordVisibility(fieldId) {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.type = (field.type === 'password') ? 'text' : 'password';
+      }
+    }
+
+    function showAlert(msg, type = 'info') {
+      const alertBox = document.getElementById('login-alert-box');
+      if (alertBox) {
+        alertBox.textContent = msg;
+        alertBox.className = `login-alert ${type}`;
+        alertBox.style.display = 'block';
+      }
+    }
+
+    function clearAlert() {
+      const alertBox = document.getElementById('login-alert-box');
+      if (alertBox) {
+        alertBox.style.display = 'none';
+        alertBox.textContent = '';
+      }
+    }
+
+    // ==========================================
+    // SIGN IN SUBMISSION (STRICT PASSWORD CHECK)
+    // ==========================================
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      clearAlert();
+
+      const email = document.getElementById('login-email').value;
+      const pwd = document.getElementById('login-password').value;
+
+      if (!email || !pwd) {
+        showAlert('Please provide both email and password.', 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-signin');
+      const submitText = document.getElementById('btn-signin-text');
+      const submitIcon = document.getElementById('btn-signin-icon');
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Verifying Credentials...';
+      submitIcon.textContent = '⏳';
+
+      try {
+        const result = await window.SupabaseAuth.signIn(email, pwd, currentSignInRole);
+
+        if (!result.success) {
+          showAlert(`Authentication Failed: ${result.error}`, 'error');
+          submitBtn.disabled = false;
+          submitText.textContent = 'Sign In with Verified Credentials';
+          submitIcon.textContent = '➔';
+          return;
+        }
+
+        showAlert(`✓ Authentication verified! Welcome back, ${result.name || email}. Redirecting to ${result.role.toUpperCase()} dashboard...`, 'success');
+
+        setTimeout(() => {
+          let targetUrl = 'index.html#/student/overview';
+          if (result.role === 'faculty') {
+            targetUrl = 'index.html#/faculty/overview';
+          } else if (result.role === 'officer') {
+            targetUrl = 'index.html#/officer/overview';
+          }
+          window.location.href = targetUrl;
+        }, 600);
+
+      } catch (err) {
+        showAlert(`Error during authentication: ${err.message}`, 'error');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Sign In with Verified Credentials';
+        submitIcon.textContent = '➔';
+      }
+    }
+
+    // ==========================================
+    // REGISTER SUBMISSION (FACULTY PROTECTED)
+    // ==========================================
+    async function handleRegisterSubmit(e) {
+      e.preventDefault();
+      clearAlert();
+
+      const fullName = document.getElementById('reg-fullname').value;
+      const email = document.getElementById('reg-email').value;
+      const rollNo = document.getElementById('reg-rollno').value;
+      const department = document.getElementById('reg-dept').value;
+      const password = document.getElementById('reg-password').value;
+      const confirmPassword = document.getElementById('reg-confirm-password').value;
+      const facultyKey = document.getElementById('reg-faculty-key').value;
+
+      if (!fullName || !email || !password) {
+        showAlert('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match. Please verify both password fields.', 'error');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('Password must be at least 6 characters.', 'error');
+        return;
+      }
+
+      // Security check: Check Faculty Key upfront
+      if (currentRegisterRole !== 'student' && !facultyKey) {
+        showAlert(`Access Denied: You must provide an Institutional Passcode to register as ${currentRegisterRole === 'faculty' ? 'Faculty Mentor' : 'T&P Officer'}.`, 'error');
+        return;
+      }
+
+      const submitBtn = document.getElementById('btn-submit-register');
+      const submitText = document.getElementById('btn-reg-text');
+      const submitIcon = document.getElementById('btn-reg-icon');
+
+      submitBtn.disabled = true;
+      submitText.textContent = 'Registering Account...';
+      submitIcon.textContent = '⏳';
+
+      try {
+        const result = await window.SupabaseAuth.signUp({
+          fullName,
+          email,
+          rollNo,
+          department,
+          role: currentRegisterRole,
+          password,
+          facultyKey
+        });
+
+        if (!result.success) {
+          showAlert(`Registration Failed: ${result.error}`, 'error');
+          submitBtn.disabled = false;
+          submitText.textContent = 'Create Authenticated Account';
+          submitIcon.textContent = '📝';
+          return;
+        }
+
+        showAlert(result.message || '✓ Account created successfully! Please sign in.', 'success');
+
+        // Reset and prefill sign in
+        setTimeout(() => {
+          switchAuthMode('signin');
+          document.getElementById('login-email').value = email;
+          document.getElementById('login-password').value = password;
+          setSignInRole(currentRegisterRole);
+          showAlert(`✓ Account ready for ${fullName} (${currentRegisterRole.toUpperCase()}). Click Sign In to enter.`, 'success');
+        }, 1200);
+
+      } catch (err) {
+        showAlert(`Registration Error: ${err.message}`, 'error');
+        submitBtn.disabled = false;
+        submitText.textContent = 'Create Authenticated Account';
+        submitIcon.textContent = '📝';
       }
     }
 
     function handleForgotPassword(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value || 'your registered email';
-      showAlert(`Password reset link sent to ${email}. Please check your inbox.`, 'success');
-    }
-
-    function showAlert(msg, type) {
-      const alertBox = document.getElementById('login-alert-box');
-      alertBox.textContent = msg;
-      alertBox.className = `login-alert ${type}`;
-      alertBox.style.display = 'block';
-    }
-
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const pwd = document.getElementById('login-password').value;
-
-      if (!email || !pwd) {
-        showAlert('Please enter both email and password.', 'error');
-        return;
-      }
-
-      const submitBtn = document.getElementById('btn-submit');
-      const submitText = document.getElementById('btn-submit-text');
-      const submitIcon = document.getElementById('btn-submit-icon');
-
-      submitBtn.disabled = true;
-      submitText.textContent = 'Authenticating...';
-      submitIcon.textContent = '⏳';
-
-      showAlert('Authentication successful! Loading placement dashboard...', 'success');
-
-      setTimeout(() => {
-        localStorage.setItem('spp_user_email', email);
-        localStorage.setItem('spp_user_role', activeRole);
-        const targetUrl = roleCreds[activeRole] ? roleCreds[activeRole].redirect : 'index.html#/student/overview';
-        window.location.href = targetUrl;
-      }, 600);
+      showAlert(`Password reset request submitted for ${email}. Check your inbox for reset instructions.`, 'info');
     }
 
     function handleSSOLogin() {
-      showAlert('SSO Provider connected. Logging in as University User...', 'success');
+      showAlert('Connecting to University Google Workspace SSO...', 'info');
       setTimeout(() => {
-        localStorage.setItem('spp_user_role', activeRole);
-        const targetUrl = roleCreds[activeRole] ? roleCreds[activeRole].redirect : 'index.html#/student/overview';
-        window.location.href = targetUrl;
-      }, 600);
+        localStorage.setItem('spp_user_email', 'aditya.verma@college.edu');
+        localStorage.setItem('spp_user_role', currentSignInRole);
+        window.location.href = roleCreds[currentSignInRole].redirect;
+      }, 700);
+    }
+
+    // ==========================================
+    // SUPABASE MODAL & CONFIG
+    // ==========================================
+    function openSupabaseModal() {
+      const modal = document.getElementById('modal-supabase-config');
+      const inputUrl = document.getElementById('input-supabase-url');
+      const inputKey = document.getElementById('input-supabase-key');
+      const inputPasscode = document.getElementById('input-faculty-passcode');
+
+      if (inputUrl) inputUrl.value = localStorage.getItem('spp_supabase_url') || '';
+      if (inputKey) inputKey.value = localStorage.getItem('spp_supabase_anon_key') || '';
+      if (inputPasscode) inputPasscode.value = localStorage.getItem('spp_faculty_passcode') || 'FACULTY2026';
+
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeSupabaseModal() {
+      const modal = document.getElementById('modal-supabase-config');
+      if (modal) modal.classList.remove('active');
+    }
+
+    async function testSupabaseConnection() {
+      const url = document.getElementById('input-supabase-url').value.trim();
+      const key = document.getElementById('input-supabase-key').value.trim();
+
+      if (!url || !key) {
+        alert('Please enter both Supabase URL and Anon Key to test.');
+        return;
+      }
+
+      try {
+        if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+          alert('Supabase SDK not loaded. Check internet connection to CDN.');
+          return;
+        }
+
+        const testClient = window.supabase.createClient(url, key);
+        const { data, error } = await testClient.auth.getSession();
+        if (error) {
+          alert('Connection test failed: ' + error.message);
+        } else {
+          alert('✓ Supabase connection successful! Auth service is online and responsive.');
+        }
+      } catch (err) {
+        alert('Error testing connection: ' + err.message);
+      }
+    }
+
+    function saveSupabaseConfig() {
+      const url = document.getElementById('input-supabase-url').value.trim();
+      const key = document.getElementById('input-supabase-key').value.trim();
+      const passcode = document.getElementById('input-faculty-passcode').value.trim();
+
+      if (passcode) {
+        localStorage.setItem('spp_faculty_passcode', passcode);
+      }
+
+      window.SupabaseAuth.updateConfig(url, key);
+      updateCloudStatusIndicator();
+      closeSupabaseModal();
+
+      if (url && key) {
+        showAlert('✓ Supabase credentials saved and connected successfully!', 'success');
+      } else {
+        showAlert('Switched to Local / Demo Authentication mode with strict password validation.', 'info');
+      }
     }
   </script>
 </body>

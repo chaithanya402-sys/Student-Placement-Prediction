@@ -195,24 +195,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Sign Out Handler
+  window.handleLogout = async function() {
+    if (window.SupabaseAuth) {
+      await window.SupabaseAuth.signOut();
+    } else {
+      localStorage.removeItem('spp_user_email');
+      localStorage.removeItem('spp_user_role');
+      localStorage.removeItem('spp_user_name');
+      window.location.href = 'login.html';
+    }
+  };
+
   function updateUserProfileHeader(role) {
     const profile = store.getUserProfile(role);
+    const customName = localStorage.getItem('spp_user_name');
+    const customEmail = localStorage.getItem('spp_user_email');
+    const assignedRole = localStorage.getItem('spp_user_role') || role;
+
     const nameLabel = document.getElementById('user-name-label');
     const emailLabel = document.getElementById('user-email-label');
     const avatarPill = document.getElementById('user-avatar-pill');
     const topAvatarCircle = document.getElementById('top-avatar-circle');
     const roleSelect = document.getElementById('header-role-select');
 
-    if (nameLabel) nameLabel.textContent = profile.name;
-    if (emailLabel) emailLabel.textContent = profile.email;
-    if (avatarPill) avatarPill.textContent = profile.avatar || 'AV';
-    if (topAvatarCircle) topAvatarCircle.textContent = profile.avatar || 'AV';
+    const displayName = (assignedRole === role && customName) ? customName : profile.name;
+    const displayEmail = (assignedRole === role && customEmail) ? customEmail : profile.email;
+    const initials = displayName ? displayName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : (profile.avatar || 'US');
+
+    if (nameLabel) nameLabel.textContent = displayName;
+    if (emailLabel) emailLabel.textContent = displayEmail;
+    if (avatarPill) avatarPill.textContent = initials;
+    if (topAvatarCircle) topAvatarCircle.textContent = initials;
     if (roleSelect && roleSelect.value !== role) {
       roleSelect.value = role;
     }
   }
 
   window.switchActiveRole = function(role) {
+    const authenticatedRole = localStorage.getItem('spp_user_role') || 'student';
+    // Role protection: Disallow unauthorized portal hopping
+    if (authenticatedRole === 'student' && role !== 'student') {
+      window.showToast?.('Role Restricted: Your account is authenticated as Student. Log in with faculty credentials to access this portal.', 'error');
+      const select = document.getElementById('header-role-select');
+      if (select) select.value = 'student';
+      return;
+    }
+    if (authenticatedRole === 'faculty' && role === 'officer') {
+      window.showToast?.('Role Restricted: Faculty mentors cannot access the T&P Officer portal.', 'error');
+      const select = document.getElementById('header-role-select');
+      if (select) select.value = 'faculty';
+      return;
+    }
+
     store.setActiveRole(role);
     renderSidebarNav(role);
     updateUserProfileHeader(role);
@@ -223,6 +258,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateRouting() {
     let currentRoute = getCurrentRoute();
+    const authenticatedRole = localStorage.getItem('spp_user_role') || 'student';
+
+    // Route protection guards
+    if (authenticatedRole === 'student' && (currentRoute.startsWith('/faculty/') || currentRoute.startsWith('/officer/'))) {
+      window.showToast?.('Access Restricted: Students cannot access Faculty or Officer portals.', 'error');
+      window.location.hash = '/student/overview';
+      return;
+    }
+    if (authenticatedRole === 'faculty' && currentRoute.startsWith('/officer/')) {
+      window.showToast?.('Access Restricted: Faculty cannot access T&P Officer administration.', 'error');
+      window.location.hash = '/faculty/overview';
+      return;
+    }
 
     let detectedRole = store.getActiveRole();
     if (currentRoute.startsWith('/student/')) {

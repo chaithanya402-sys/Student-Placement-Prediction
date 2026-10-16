@@ -79,7 +79,7 @@
       </div>
 
       <!-- User Profile Footer with Sign Out -->
-      <div class="sidebar-user" onclick="window.location.href='login.html'" title="Sign Out or Switch Account">
+      <div class="sidebar-user" onclick="handleLogout()" title="Sign Out or Switch Account">
         <div style="display: flex; align-items: center; gap: 10px;">
           <div class="user-avatar-circle" id="user-avatar-pill">AV</div>
           <div>
@@ -2954,6 +2954,9 @@
     </div>
   </div>
 
+  <!-- Supabase Official JS SDK + Application Auth Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
   <!-- Central Reactive Data Store + App Controller -->
   <script src="dataStore.js"></script>
   <script src="app.js"></script>
