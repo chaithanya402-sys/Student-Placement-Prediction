@@ -49,8 +49,12 @@ A full-stack, machine-learning-powered student placement predictive analytics da
 ---
 
 ## 🚀 How to Run
-- Run locally with Python:
+- Run locally with Node.js:
   ```bash
-  python -m http.server 3000
+  npm start
   ```
-- Open [**http://localhost:3000**](http://localhost:3000) in your browser.
+- Or run with Python:
+  ```bash
+  python server.py
+  ```
+- Open [**http://localhost:5000/landing.html**](http://localhost:5000/landing.html) in your browser.

@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
 
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT, 10) || parseInt(process.argv[2], 10) || 5000;
 const DIR = __dirname;
 
 const MIME_TYPES = {
